@@ -55,7 +55,7 @@ public class ExpressionFormatter {
                 continue;
             }
             // 遇到操作符，
-            ExpItem lastOprItem = null;
+            ExpItem lastOprItem;
             // - 如果遇到")"，直接压入操作符栈中
             if (expItem.is(ExpressionEnum.BRACKET_RIGHT)) {
                 operatorStack.push(expItem);
@@ -79,7 +79,7 @@ public class ExpressionFormatter {
             // - 当前操作符的优先级小于等于操作符栈栈顶操作符优先级，弹出操作符栈顶优先级大于当前操作符的操作符并压入结果栈，当前操作符进操作符栈
             else {
                 ExpItem oprItem = operatorStack.peek();
-                while(oprItem != null && oprItem.withHigherPriority(expItem)) {
+                while(oprItem != null && oprItem.isOperator() && oprItem.withHigherPriority(expItem)) {
                     prefixExp.add(oprItem);
                     operatorStack.pop();
                     if (operatorStack.size() == 0) {
@@ -136,7 +136,7 @@ public class ExpressionFormatter {
             // - 当前操作符的优先级小于等于操作符栈栈顶操作符优先级，弹出操作符栈顶优先级大于等于当前操作符的操作符并压入结果栈，当前操作符进操作符栈
             else {
                 ExpItem oprItem = operatorStack.peek();
-                while(oprItem != null && !oprItem.withLowerPriority(expItem)) {
+                while(oprItem != null && oprItem.isOperator() && !oprItem.withLowerPriority(expItem)) {
                     suffixExp.add(oprItem);
                     operatorStack.pop();
                     if (operatorStack.size() == 0) {
@@ -279,7 +279,11 @@ public class ExpressionFormatter {
         }
 
         public boolean isValue() {
-            return "value".equals(this.itemTyp.getType());
+            return this.itemTyp.isValue();
+        }
+
+        public boolean isOperator() {
+            return this.itemTyp.isOperator();
         }
 
         public int getOprPriority() {

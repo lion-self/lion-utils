@@ -4,18 +4,19 @@ package com.lion.formatter;
  * @author laiyuan
  */
 public enum ExpressionEnum {
+
     // 表达式值
-    VALUE("value", 0, true),
+    VALUE(ExpressionEnum.TYPE_VALUE, 0, true),
     // 左括号
-    BRACKET_LEFT("operator", 99, false),
+    BRACKET_LEFT(ExpressionEnum.TYPE_BRACKET, 0, false),
     // 右括号
-    BRACKET_RIGHT("operator", 99, false),
+    BRACKET_RIGHT(ExpressionEnum.TYPE_BRACKET, 0, false),
     // 逻辑运算符 非
-    LOGIC_NO("operator", 1, false),
-    // 逻辑运算符 and
-    LOGIC_AND("operator",  2, true),
-    // 逻辑运算符 or
-    LOGIC_OR("operator", 2, true);
+    LOGIC_NO(ExpressionEnum.TYPE_OPERATOR, 1, false),
+    // 逻辑运算符 与
+    LOGIC_AND(ExpressionEnum.TYPE_OPERATOR,  2, true),
+    // 逻辑运算符 或
+    LOGIC_OR(ExpressionEnum.TYPE_OPERATOR, 2, true);
 
     /**
      * 字符类型
@@ -29,6 +30,10 @@ public enum ExpressionEnum {
      * 是否可以和同类型字符合并成一个字符
      */
     private final boolean canMerge;
+
+    private static final String TYPE_VALUE = "value";
+    private static final String TYPE_OPERATOR = "operator";
+    private static final String TYPE_BRACKET = "bracket";
 
     ExpressionEnum(String type, int oprPriority, boolean canMerge) {
         this.type = type;
@@ -64,8 +69,16 @@ public enum ExpressionEnum {
         return result;
     }
 
-    public String getType() {
-        return type;
+    public boolean isValue() {
+        return TYPE_VALUE.equals(this.type);
+    }
+
+    public boolean isBracket() {
+        return TYPE_BRACKET.equals(this.type);
+    }
+
+    public boolean isOperator() {
+        return TYPE_OPERATOR.equals(this.type);
     }
 
     public int getOprPriority() {
