@@ -78,7 +78,8 @@ public class RegularUtils {
         if (s == null || s.isBlank()) {
             return false;
         }
-        Pattern p = Pattern.compile("^\\d*$");
+        String str = "^\\d*$";
+        Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(s);
         return m.matches();
     }
@@ -90,7 +91,8 @@ public class RegularUtils {
         if (s == null || s.isBlank()) {
             return false;
         }
-        Pattern p = Pattern.compile("^[0-9]+(\\.[0-9]+)?$");
+        String str = "^[0-9]+(\\.[0-9]+)?$";
+        Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(s);
         return m.matches();
     }

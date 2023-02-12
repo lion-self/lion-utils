@@ -30,7 +30,7 @@ public class ClassXUtils {
      */
     public static List<Class<?>> getAllClassByPackageName(Package pkg) {
         String packageName = pkg.getName();
-        // 获取当前包下以及子包下所以的类
+        // 获取当前包下以及子包下所有的类
         return getClasses(packageName);
     }
 
@@ -45,15 +45,13 @@ public class ClassXUtils {
             String packageName = c.getPackage().getName();
             // 获取当前包下以及子包下所以的类
             List<Class<?>> allClass = getClasses(packageName);
-            if (allClass != null) {
-                returnClassList = new ArrayList<Class<?>>();
-                for (Class<?> cls : allClass) {
-                    // 判断是否是同一个接口
-                    if (c.isAssignableFrom(cls)) {
-                        // 本身不加入进去
-                        if (!c.equals(cls)) {
-                            returnClassList.add(cls);
-                        }
+            returnClassList = new ArrayList<Class<?>>();
+            for (Class<?> cls : allClass) {
+                // 判断是否是同一个接口
+                if (c.isAssignableFrom(cls)) {
+                    // 本身不加入进去
+                    if (!c.equals(cls)) {
+                        returnClassList.add(cls);
                     }
                 }
             }
@@ -75,8 +73,7 @@ public class ClassXUtils {
         }
         File packageDir = new File(realClassLocation);
         if (packageDir.isDirectory()) {
-            String[] allClassName = packageDir.list();
-            return allClassName;
+            return packageDir.list();
         }
         return null;
     }
@@ -136,17 +133,15 @@ public class ClassXUtils {
                                     packageName = name.substring(0, idx).replace('/', '.');
                                 }
                                 // 如果可以迭代下去 并且是一个包
-                                if ((idx != -1) || recursive) {
-                                    // 如果是一个.class文件 而且不是目录
-                                    if (name.endsWith(".class") && !entry.isDirectory()) {
-                                        // 去掉后面的".class" 获取真正的类名
-                                        String className = name.substring(packageName.length() + 1, name.length() - 6);
-                                        try {
-                                            // 添加到classes
-                                            classes.add(Class.forName(packageName + '.' + className));
-                                        } catch (ClassNotFoundException e) {
-                                            e.printStackTrace();
-                                        }
+                                // 如果是一个.class文件 而且不是目录
+                                if (name.endsWith(".class") && !entry.isDirectory()) {
+                                    // 去掉后面的".class" 获取真正的类名
+                                    String className = name.substring(packageName.length() + 1, name.length() - 6);
+                                    try {
+                                        // 添加到classes
+                                        classes.add(Class.forName(packageName + '.' + className));
+                                    } catch (ClassNotFoundException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }
@@ -176,11 +171,13 @@ public class ClassXUtils {
         // 如果存在 就获取包下的所有文件 包括目录
         File[] dirfiles = dir.listFiles(new FileFilter() {
             // 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
+            @Override
             public boolean accept(File file) {
                 return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
             }
         });
         // 循环所有文件
+        assert dirfiles != null;
         for (File file : dirfiles) {
             // 如果是目录 则继续扫描
             if (file.isDirectory()) {

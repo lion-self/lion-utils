@@ -1,6 +1,7 @@
 package com.lion.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * BigDecimalUtils 计算工具
@@ -39,9 +40,9 @@ public class BigDecimalUtils {
     /**
 	  * 浮点数除法
 	  */
-	public static BigDecimal divide(double v1,double v2) {
+	public static BigDecimal divide(double v1,double v2, RoundingMode roundingMode) {
         BigDecimal b1 = new BigDecimal(Double.toString(v1));
         BigDecimal b2 = new BigDecimal(Double.toString(v2));
-        return b1.divide(b2);
+        return b1.divide(b2, roundingMode);
     }
 }

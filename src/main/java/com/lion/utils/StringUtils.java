@@ -13,9 +13,6 @@ public class StringUtils {
      */
     public static String getRandom(int i) {
         Random random = new Random();
-        if (i == 0) {
-            return "";
-        }
         String str = "";
         for (int k = 0; k < i; k++) {
             str = str + random.nextInt(9);
